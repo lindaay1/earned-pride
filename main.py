@@ -47,13 +47,10 @@ def publish(sentence):
     target = Path(os.environ.get("MAKEFUN_OUTPUT_DIR") or "/output")
     target.mkdir(parents=True, exist_ok=True)
     payload = sentence_bytes(sentence)
-    written = {}
     for name in ("entry.txt", "pride.txt"):
         dest = target / name
         dest.write_bytes(payload)
-        written[name] = dest.read_bytes()
-    for name, data in written.items():
-        if data != payload:
+        if dest.read_bytes() != payload:
             raise AssertionError(name + " came back different")
 
 
